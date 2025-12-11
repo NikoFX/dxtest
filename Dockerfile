@@ -42,6 +42,8 @@ COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXAp
 
 COPY native/* /app/
 
+COPY /native/DevExpress_License.txt /root/.config/DevExpress/DevExpress_License.txt
+
 ENV LD_LIBRARY_PATH=/app:$LD_LIBRARY_PATH
 
 
