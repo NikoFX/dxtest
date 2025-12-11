@@ -21,7 +21,7 @@ RUN apt-get update && \
     libfontconfig1 \
     libfreetype6 \
     libpng16-16 \
-    libjpeg-turbo8 \
+    libjpeg62-turbo \
     libxcb1 \
     libx11-6 \
     libxrender1 \
