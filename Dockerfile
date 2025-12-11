@@ -2,9 +2,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-COPY DXApplication1/ ./DXApplication1/
+COPY MainDemo/ ./MainDemo/
 
-RUN dotnet publish DXApplication1/DXApplication1.Blazor.Server/DXApplication1.Blazor.Server.csproj \
+RUN dotnet publish MainDemo/MainDemo.Blazor.Server/MainDemo.Blazor.Server.csproj \
      -c Release \
     -o /app/publish \
     -r linux-x64 \
@@ -14,7 +14,7 @@ RUN dotnet publish DXApplication1/DXApplication1.Blazor.Server/DXApplication1.Bl
 # Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
-COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXApplication1.sqlite
+COPY MainDemo/MainDemo.Blazor.Server/MainDemo.sqlite /app/MainDemo.sqlite
 
 RUN apt-get update && \
     apt-get install -y \
@@ -36,7 +36,7 @@ ENV DATA_DIR=/var/data
 # Create folder like Render expects
 RUN mkdir -p /var/data
 
-COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXApplication1.sqlite
+COPY MainDemo/MainDemo.Blazor.Server/MainDemo.sqlite /app/MainDemo.sqlite
 # SkiaSharp native libs
 #COPY --from=build /root/.nuget/packages/*/*/runtimes/linux-x64/native/* /app/libs/
 
@@ -47,4 +47,4 @@ COPY /native/DevExpress_License.txt /root/.config/DevExpress/DevExpress_License.
 ENV LD_LIBRARY_PATH=/app:$LD_LIBRARY_PATH
 
 
-ENTRYPOINT ["dotnet", "DXApplication1.Blazor.Server.dll"]
+ENTRYPOINT ["dotnet", "MainDemo.Blazor.Server.dll"]
