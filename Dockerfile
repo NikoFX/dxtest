@@ -5,8 +5,9 @@ WORKDIR /src
 COPY DXApplication1/ ./DXApplication1/
 
 RUN dotnet publish DXApplication1/DXApplication1.Blazor.Server/DXApplication1.Blazor.Server.csproj \
-    -c Release \
+     -c Release \
     -o /app/publish \
+    -r linux-x64 \
     --self-contained false \
     /p:UseAppHost=false
 
@@ -14,6 +15,15 @@ RUN dotnet publish DXApplication1/DXApplication1.Blazor.Server/DXApplication1.Bl
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXApplication1.sqlite
+
+RUN apt-get update && apt-get install -y \
+    libfontconfig1 \
+    libfreetype6 \
+    libpng16-16 \
+    libjpeg-turbo8 \
+    libgif7 \
+    libharfbuzz0b \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
 
