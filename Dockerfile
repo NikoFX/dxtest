@@ -22,4 +22,6 @@ ENV DATA_DIR=/var/data
 # Create folder like Render expects
 RUN mkdir -p /var/data
 
+COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXApplication1.sqlite
+
 ENTRYPOINT ["dotnet", "DXApplication1.Blazor.Server.dll"]
