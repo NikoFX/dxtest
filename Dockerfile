@@ -24,5 +24,8 @@ ENV DATA_DIR=/var/data
 RUN mkdir -p /var/data
 
 COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXApplication1.sqlite
+# SkiaSharp native libs
+COPY --from=build /root/.nuget/packages/*/*/runtimes/linux-x64/native/* /app/
+
 
 ENTRYPOINT ["dotnet", "DXApplication1.Blazor.Server.dll"]
