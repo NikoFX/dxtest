@@ -13,6 +13,7 @@ RUN dotnet publish DXApplication1/DXApplication1.Blazor.Server/DXApplication1.Bl
 # Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
+COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXApplication1.sqlite
 
 COPY --from=build /app/publish .
 
