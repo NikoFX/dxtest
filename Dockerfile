@@ -16,14 +16,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY DXApplication1/DXApplication1.Blazor.Server/DXApplication1.sqlite /app/DXApplication1.sqlite
 
-RUN apt-get update && apt-get install -y \
-    libfontconfig1 \
-    libfreetype6 \
-    libpng16-16 \
-    libjpeg-turbo8 \
-    libgif7 \
-    libharfbuzz0b \
-    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
 
