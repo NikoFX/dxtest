@@ -1,50 +1,16 @@
-# Build
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 8080
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:9.0 AS deps
+WORKDIR /app
+
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-COPY MainDemo/ ./MainDemo/
+# 
 
-RUN dotnet publish MainDemo/MainDemo.Blazor.Server/MainDemo.Blazor.Server.csproj \
-     -c Release \
-    -o /app/publish \
-    -r linux-x64 \
-    --self-contained false \
-    /p:UseAppHost=false
-
-# Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM base AS final
 WORKDIR /app
-COPY MainDemo/MainDemo.Blazor.Server/MainDemo.sqlite /app/MainDemo.sqlite
-
-RUN apt-get update && \
-    apt-get install -y \
-    libfontconfig1 \
-    libfreetype6 \
-    libpng16-16 \
-    libjpeg62-turbo \
-    libxcb1 \
-    libx11-6 \
-    libxrender1 \
-    && rm -rf /var/lib/apt/lists/*
-
-
-COPY --from=build /app/publish .
-
-# Render persistent volume:
-ENV DATA_DIR=/var/data
-
-# Create folder like Render expects
-RUN mkdir -p /var/data
-
-COPY MainDemo/MainDemo.Blazor.Server/MainDemo.sqlite /app/MainDemo.sqlite
-# SkiaSharp native libs
-#COPY --from=build /root/.nuget/packages/*/*/runtimes/linux-x64/native/* /app/libs/
-
-COPY native/* /app/
-
-COPY /native/DevExpress_License.txt /root/.config/DevExpress/DevExpress_License.txt
-
-ENV LD_LIBRARY_PATH=/app:$LD_LIBRARY_PATH
-
-
-ENTRYPOINT ["dotnet", "MainDemo.Blazor.Server.dll"]
+COPY ./linux/ ./
+ENTRYPOINT ["dotnet", "tap.Blazor.Server.dll"]
