@@ -21,4 +21,16 @@ COPY native/* /app/
 
 ENV LD_LIBRARY_PATH=/app:$LD_LIBRARY_PATH
 
+RUN apt-get update && \
+    apt-get install -y \
+    libfontconfig1 \
+    libfreetype6 \
+    libpng16-16 \
+    libjpeg62-turbo \
+    libxcb1 \
+    libx11-6 \
+    libxrender1 \
+    && rm -rf /var/lib/apt/lists/*
+
+
 ENTRYPOINT ["dotnet", "tap.Blazor.Server.dll"]
