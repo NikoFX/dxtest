@@ -13,4 +13,12 @@ WORKDIR /src
 FROM base AS final
 WORKDIR /app
 COPY ./linux/ ./
+
+COPY native/* /app/libs/
+
+COPY native/* /app/
+
+
+ENV LD_LIBRARY_PATH=/app:$LD_LIBRARY_PATH
+
 ENTRYPOINT ["dotnet", "tap.Blazor.Server.dll"]
